@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<templates>
+    <t t-extend="mail.chatter.Buttons">
+        <t t-jquery=".o_chatter_button_schedule_activity" t-operation="after">
+
+            <button id="btnToggleMessages" class="btn btn-link" onClick="toggle_messages_btn(this.id)">
+                Hide Messages
+            </button>
+
+            <button class="btn btn-link" onClick="show_hidden_messages(this.id)">
+                Show all hidden messages
+            </button>
+
+            <script>
+                $.fn.toggleHTML = function(t1, t2){
+                    if(this.html() == t1){
+                        this.html(t2);
+                    } else {
+                        this.html(t1);
+                    }
+                    return this;
+                };
+                function toggle_messages_btn(ev){
+                    $(".o_mail_discussion").toggle();
+                    $("#btnToggleMessages").toggleHTML("Show messages", "Hide messages");
+                }
+                function show_hidden_messages(ev){
+                    $(".o_thread_tooltip_container").show();
+                    $(".o_thread_message").show();
+                }
+            </script>
+        </t>
+    </t>
+
+    <t t-extend="mail.widget.Thread.Message">
+        <t t-jquery=".o_thread_tooltip_container" t-operation="after">
+            <button class="btn btn-default" t-att-messageID="message.getID()" onClick="btn_clicked(this)">
+                <i class="fa fa-trash"> </i>
+            </button>
+            <script>
+                function btn_clicked(btn){
+                    console.log(btn);
+                    console.log(btn.getAttribute("messageID"));
+                    var messageID = btn.getAttribute("messageID");
+                    $("[data-message-id=" + CSS.escape(messageID) + "]").hide();
+                }
+            </script>
+        </t>
+    </t>
+</templates>
+
